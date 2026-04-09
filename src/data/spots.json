@@ -8,10 +8,11 @@
     "outlets": true,
     "foodDrink": false,
     "groupStudy": true,
-    "lat": 43.0755,
-    "lng": -89.3986,
-    "hours": { "mon": [8, 22], "tue": [8, 22], "wed": [8, 22], "thu": [8, 22], "fri": [8, 18], "sat": [10, 18], "sun": [10, 22] },
-    "tags": ["quiet-ish", "lots of seats", "reliable"]
+    "wifi": true,
+    "seating": "High",
+    "description": "Reliable study floors with many seats. Good for focused work.",
+    "tags": ["reliable", "quiet-ish", "central"],
+    "hours": { "mon": [8, 22], "tue": [8, 22], "wed": [8, 22], "thu": [8, 22], "fri": [8, 18], "sat": [10, 18], "sun": [10, 22] }
   },
   {
     "id": "college-library",
@@ -22,10 +23,11 @@
     "outlets": true,
     "foodDrink": true,
     "groupStudy": true,
-    "lat": 43.0766,
-    "lng": -89.4097,
-    "hours": { "mon": [8, 23], "tue": [8, 23], "wed": [8, 23], "thu": [8, 23], "fri": [8, 20], "sat": [10, 20], "sun": [10, 23] },
-    "tags": ["busy", "central", "study rooms"]
+    "wifi": true,
+    "seating": "High",
+    "description": "Busy but convenient. Great for group work and quick study sessions.",
+    "tags": ["busy", "study rooms", "lots of traffic"],
+    "hours": { "mon": [8, 23], "tue": [8, 23], "wed": [8, 23], "thu": [8, 23], "fri": [8, 20], "sat": [10, 20], "sun": [10, 23] }
   },
   {
     "id": "union-south",
@@ -36,10 +38,11 @@
     "outlets": true,
     "foodDrink": true,
     "groupStudy": true,
-    "lat": 43.0725,
-    "lng": -89.4066,
-    "hours": { "mon": [7, 24], "tue": [7, 24], "wed": [7, 24], "thu": [7, 24], "fri": [7, 24], "sat": [8, 24], "sun": [8, 24] },
-    "tags": ["lively", "food nearby", "group-friendly"]
+    "wifi": true,
+    "seating": "High",
+    "description": "Lively environment with food options. Good for casual work or group meetings.",
+    "tags": ["lively", "food nearby", "group-friendly"],
+    "hours": { "mon": [7, 24], "tue": [7, 24], "wed": [7, 24], "thu": [7, 24], "fri": [7, 24], "sat": [8, 24], "sun": [8, 24] }
   },
   {
     "id": "memorial-union",
@@ -50,13 +53,14 @@
     "outlets": true,
     "foodDrink": true,
     "groupStudy": true,
-    "lat": 43.0779,
-    "lng": -89.4071,
-    "hours": { "mon": [7, 23], "tue": [7, 23], "wed": [7, 23], "thu": [7, 23], "fri": [7, 23], "sat": [8, 23], "sun": [8, 23] },
-    "tags": ["lake view", "social", "easy meetups"]
+    "wifi": true,
+    "seating": "High",
+    "description": "Social study vibes with lots of foot traffic. Nice for short sessions.",
+    "tags": ["social", "popular", "meetups"],
+    "hours": { "mon": [7, 23], "tue": [7, 23], "wed": [7, 23], "thu": [7, 23], "fri": [7, 23], "sat": [8, 23], "sun": [8, 23] }
   },
   {
-    "id": "discovery-building",
+    "id": "discovery-atrium",
     "name": "Discovery Building Atrium",
     "type": "Building Lounge",
     "location": "330 N Orchard St",
@@ -64,10 +68,11 @@
     "outlets": true,
     "foodDrink": false,
     "groupStudy": true,
-    "lat": 43.0769,
-    "lng": -89.4147,
-    "hours": { "mon": [7, 21], "tue": [7, 21], "wed": [7, 21], "thu": [7, 21], "fri": [7, 18], "sat": [0, 0], "sun": [0, 0] },
-    "tags": ["bright", "modern", "good tables"]
+    "wifi": true,
+    "seating": "Medium",
+    "description": "Bright open space, modern tables. Can be moderate noise around lunch.",
+    "tags": ["bright", "modern", "tables"],
+    "hours": { "mon": [7, 21], "tue": [7, 21], "wed": [7, 21], "thu": [7, 21], "fri": [7, 18], "sat": [0, 0], "sun": [0, 0] }
   },
   {
     "id": "engineering-hall",
@@ -78,24 +83,56 @@
     "outlets": true,
     "foodDrink": false,
     "groupStudy": true,
-    "lat": 43.0721,
-    "lng": -89.4116,
-    "hours": { "mon": [7, 22], "tue": [7, 22], "wed": [7, 22], "thu": [7, 22], "fri": [7, 18], "sat": [0, 0], "sun": [0, 0] },
-    "tags": ["close to classes", "whiteboards sometimes"]
+    "wifi": true,
+    "seating": "Medium",
+    "description": "Convenient if you have engineering classes. Good tables, sometimes busy.",
+    "tags": ["close to classes", "practical", "whiteboard sometimes"],
+    "hours": { "mon": [7, 22], "tue": [7, 22], "wed": [7, 22], "thu": [7, 22], "fri": [7, 18], "sat": [0, 0], "sun": [0, 0] }
   },
   {
-    "id": "indie-coffee",
-    "name": "Indie Coffee (Prototype)",
+    "id": "math-library",
+    "name": "Math Library",
+    "type": "Library",
+    "location": "480 Lincoln Dr",
+    "noise": 1,
+    "outlets": true,
+    "foodDrink": false,
+    "groupStudy": false,
+    "wifi": true,
+    "seating": "Low",
+    "description": "Small and very quiet. Best for deep focus.",
+    "tags": ["very quiet", "small", "focus"],
+    "hours": { "mon": [9, 20], "tue": [9, 20], "wed": [9, 20], "thu": [9, 20], "fri": [9, 17], "sat": [0, 0], "sun": [0, 0] }
+  },
+  {
+    "id": "cs-building",
+    "name": "Computer Sciences Lounge",
+    "type": "Building Lounge",
+    "location": "1210 W Dayton St",
+    "noise": 3,
+    "outlets": true,
+    "foodDrink": false,
+    "groupStudy": true,
+    "wifi": true,
+    "seating": "Medium",
+    "description": "Good for quick work between CS classes. Seats vary by time of day.",
+    "tags": ["between classes", "practical"],
+    "hours": { "mon": [8, 22], "tue": [8, 22], "wed": [8, 22], "thu": [8, 22], "fri": [8, 18], "sat": [0, 0], "sun": [0, 0] }
+  },
+  {
+    "id": "state-st-cafe",
+    "name": "State St Cafe (Prototype)",
     "type": "Cafe",
     "location": "State St area",
     "noise": 5,
     "outlets": false,
     "foodDrink": true,
     "groupStudy": false,
-    "lat": 43.0745,
-    "lng": -89.3952,
-    "hours": { "mon": [7, 19], "tue": [7, 19], "wed": [7, 19], "thu": [7, 19], "fri": [7, 19], "sat": [8, 18], "sun": [8, 18] },
-    "tags": ["loud", "coffee", "short sessions"]
+    "wifi": true,
+    "seating": "Low",
+    "description": "Noisy but has coffee. Good for short sessions and casual work.",
+    "tags": ["coffee", "loud", "short sessions"],
+    "hours": { "mon": [7, 19], "tue": [7, 19], "wed": [7, 19], "thu": [7, 19], "fri": [7, 19], "sat": [8, 18], "sun": [8, 18] }
   },
   {
     "id": "empty-classroom",
@@ -106,9 +143,10 @@
     "outlets": true,
     "foodDrink": false,
     "groupStudy": true,
-    "lat": 43.0732,
-    "lng": -89.4012,
-    "hours": { "mon": [8, 20], "tue": [8, 20], "wed": [8, 20], "thu": [8, 20], "fri": [8, 17], "sat": [0, 0], "sun": [0, 0] },
-    "tags": ["super quiet", "hit or miss", "best for focus"]
+    "wifi": false,
+    "seating": "Medium",
+    "description": "If you find one, it can be extremely quiet. Availability varies.",
+    "tags": ["super quiet", "hit or miss"],
+    "hours": { "mon": [8, 20], "tue": [8, 20], "wed": [8, 20], "thu": [8, 20], "fri": [8, 17], "sat": [0, 0], "sun": [0, 0] }
   }
 ]
