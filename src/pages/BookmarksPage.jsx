@@ -1,5 +1,5 @@
-import { Col, Container, Row } from 'react-bootstrap'
 import { useMemo, useState } from 'react'
+import { Col, Container, Row } from 'react-bootstrap'
 import baseSpots from '../data/spots.json'
 import SpotCard from '../components/SpotCard'
 import SpotDetailModal from '../components/SpotDetailModal'
@@ -16,45 +16,51 @@ export default function BookmarksPage() {
 
   const bookmarkedSpots = useMemo(() => {
     const set = new Set(bookmarks)
-    return allSpots.filter((s) => set.has(s.id))
+    return allSpots.filter((spot) => set.has(spot.id))
   }, [bookmarks, allSpots])
 
   function removeBookmark(id) {
-    setBookmarks((prev) => prev.filter((x) => x !== id))
+    setBookmarks((prev) => prev.filter((value) => value !== id))
   }
 
   function saveCheckin(id, crowd, noise, note) {
     setCheckins((prev) => {
       const raw = prev[id]
-      const arr = Array.isArray(raw) ? raw : (raw && raw.ts ? [raw] : [])
+      const arr = Array.isArray(raw) ? raw : raw?.ts ? [raw] : []
       const next = [{ crowd, noise, note, ts: Date.now() }, ...arr].slice(0, 30)
       return { ...prev, [id]: next }
     })
   }
 
   return (
-    <Container className="py-3">
-      <h2 className="mb-1">Bookmarks</h2>
-      <div className="text-muted mb-3">Your favorites are saved locally.</div>
+    <Container className="page-shell">
+      <section className="hero-panel mb-4">
+        <div className="page-kicker">Saved spots</div>
+        <h1 className="page-title page-title-sm">Your bookmarks</h1>
+        <p className="page-subtitle">
+          Keep a personal shortlist of study spaces you want to return to.
+        </p>
+      </section>
 
-      <Row className="g-3">
+      <Row className="g-4">
         {bookmarkedSpots.length === 0 ? (
           <Col>
-            <div className="border rounded p-3 bg-white text-muted">
-              No bookmarks yet. Go to Explore and tap ☆ to save a spot.
+            <div className="empty-state">
+              <h4 className="mb-2">No bookmarks yet</h4>
+              <div>Go to Explore and save a few places you want to keep track of.</div>
             </div>
           </Col>
         ) : null}
 
-        {bookmarkedSpots.map((s) => (
-          <Col key={s.id} md={6} lg={4}>
+        {bookmarkedSpots.map((spot) => (
+          <Col key={spot.id} md={6} xl={4}>
             <SpotCard
-              spot={s}
-              checkins={checkins[s.id] || null}
-              isOpenNow={isOpenNowApprox(s)}
+              spot={spot}
+              checkins={checkins[spot.id] || null}
+              isOpenNow={isOpenNowApprox(spot)}
               isBookmarked={true}
-              onToggleBookmark={() => removeBookmark(s.id)}
-              onOpenDetails={() => setSelected(s)}
+              onToggleBookmark={() => removeBookmark(spot.id)}
+              onOpenDetails={() => setSelected(spot)}
             />
           </Col>
         ))}

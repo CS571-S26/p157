@@ -1,23 +1,58 @@
-import { Card, Container } from 'react-bootstrap'
+import { Col, Container, Row } from 'react-bootstrap'
 
 export default function AboutPage() {
   return (
-    <Container className="py-3">
-      <h2 className="mb-3">About</h2>
+    <Container className="page-shell">
+      <section className="hero-panel mb-4">
+        <div className="page-kicker">About the project</div>
+        <h1 className="page-title page-title-sm">Study Spot Finder</h1>
+        <p className="page-subtitle">
+          Study Spot Finder is a responsive web app concept for UW-Madison students who need a
+          place to work between classes without wasting time walking somewhere that does not fit.
+        </p>
+      </section>
 
-      <Card>
-        <Card.Body>
-          <p className="mb-2">
-            Study Spot Finder is a UI-focused prototype for quickly finding study locations on campus.
-          </p>
-          <p className="mb-2">
-            It uses a curated static dataset and stores interactions (bookmarks, check-ins, submissions) locally in the browser.
-          </p>
-          <p className="mb-0 text-muted">
-            Next steps: expand data, add sorting, improve accessibility, and refine responsive layout.
-          </p>
-        </Card.Body>
-      </Card>
+      <Row className="g-4">
+        <Col md={6}>
+          <div className="about-card">
+            <h5>What users can do</h5>
+            <p>
+              Students can browse study spots, filter by amenities and noise, save bookmarks,
+              submit new places, and share live check-ins about current crowd and noise conditions.
+            </p>
+          </div>
+        </Col>
+
+        <Col md={6}>
+          <div className="about-card">
+            <h5>Interactive focus</h5>
+            <p>
+              The core interaction is the live check-in system. Users do not just consume
+              information. They also update the current crowd and noise so the experience feels dynamic.
+            </p>
+          </div>
+        </Col>
+
+        <Col md={6}>
+          <div className="about-card">
+            <h5>Current scope</h5>
+            <p>
+              This is a front-end prototype built with React, React Router, React Bootstrap, and
+              localStorage. It uses a curated dataset plus user-submitted spots stored locally.
+            </p>
+          </div>
+        </Col>
+
+        <Col md={6}>
+          <div className="about-card">
+            <h5>Next steps</h5>
+            <p>
+              Future improvements could include a real shared backend, user accounts, map
+              integration, accessibility refinements, and stronger campus-specific data.
+            </p>
+          </div>
+        </Col>
+      </Row>
     </Container>
   )
 }

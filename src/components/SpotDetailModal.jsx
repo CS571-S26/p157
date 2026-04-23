@@ -1,6 +1,30 @@
-import { Badge, Button, Modal } from 'react-bootstrap'
+import { Button, Col, Modal, Row } from 'react-bootstrap'
 import CheckInForm from './CheckInForm'
-import { computeCommunityStatus, crowdLabel, isOpenNowApprox, minutesAgo, noiseLabel } from '../utils/spotUtils'
+import {
+  computeCommunityStatus,
+  crowdLabel,
+  isOpenNowApprox,
+  minutesAgo,
+  noiseLabel
+} from '../utils/spotUtils'
+
+function latestEntry(raw) {
+  if (!raw) return null
+  if (Array.isArray(raw)) return raw[0] || null
+  if (raw.ts) return raw
+  return null
+}
+
+function NoiseDots({ level }) {
+  const colorClass = level <= 2 ? 'quiet' : level === 3 ? 'moderate' : 'loud'
+  return (
+    <span className="noise-dots" aria-label={`Noise ${level} out of 5`}>
+      {[1, 2, 3, 4, 5].map(i => (
+        <span key={i} className={`noise-dot${i <= level ? ` ${colorClass}` : ''}`} />
+      ))}
+    </span>
+  )
+}
 
 export default function SpotDetailModal({
   show,
@@ -18,40 +42,113 @@ export default function SpotDetailModal({
   const crowdInfo = crowdLabel(status.crowd)
   const noiseInfo = noiseLabel(status.noiseNow)
   const ago = minutesAgo(status.latestTs)
+  const noiseLevel = status.noiseNow
 
-  const latestEntry = Array.isArray(checkins) ? checkins[0] : (checkins?.ts ? checkins : null)
+  const crowdClass = {
+    success: 'crowd-empty',
+    warning: 'crowd-some',
+    danger:  'crowd-full',
+  }[crowdInfo.variant] ?? ''
+
+  const noiseClass = noiseLevel <= 2 ? 'noise-quiet' : noiseLevel === 3 ? 'noise-moderate' : 'noise-loud'
 
   return (
-    <Modal show={show} onHide={onHide} centered>
+    <Modal show={show} onHide={onHide} centered size="lg" dialogClassName="spot-modal">
       <Modal.Header closeButton>
-        <Modal.Title>{spot.name}</Modal.Title>
+        <div>
+          <div className="spot-type-pill mb-2">{spot.type}</div>
+          <div className="modal-spot-title">{spot.name}</div>
+          <div className="modal-spot-meta">{spot.location}</div>
+        </div>
       </Modal.Header>
 
       <Modal.Body>
-        <div className="text-muted">
-          {spot.type} · {spot.location}
-        </div>
+        <Row className="g-3 mb-3">
+          <Col xs={6} md={3}>
+            <div className={`detail-stat-card ${crowdClass}`}>
+              <div className="detail-stat-label">Community crowd</div>
+              <div className="detail-stat-value">{crowdInfo.text}</div>
+            </div>
+          </Col>
 
-        <div className="mt-3 d-flex flex-wrap gap-2">
-          <Badge bg={crowdInfo.variant}>Community crowd: {crowdInfo.text}</Badge>
-          <Badge bg={noiseInfo.variant}>Community noise now: {status.noiseNow}/5</Badge>
-          <Badge bg="secondary">Reports: {status.reportCount}</Badge>
-          {ago !== null ? <Badge bg="secondary">Updated {ago} min ago</Badge> : null}
-          <Badge bg={openNow ? 'success' : 'dark'}>{openNow ? 'Open now' : 'May be closed'}</Badge>
-        </div>
+          <Col xs={6} md={3}>
+            <div className={`detail-stat-card ${noiseClass}`}>
+              <div className="detail-stat-label">Noise now</div>
+              <div className="detail-stat-value">
+                <NoiseDots level={noiseLevel} />
+                {' '}{noiseLevel}/5
+              </div>
+            </div>
+          </Col>
 
-        <p className="mt-3 mb-2">{spot.description}</p>
+          <Col xs={6} md={3}>
+            <div className="detail-stat-card">
+              <div className="detail-stat-label">Reports</div>
+              <div className="detail-stat-value">{status.reportCount}</div>
+            </div>
+          </Col>
 
-        <hr />
-        <h6 className="mb-2">Add your check-in (you directly report noise)</h6>
-        <CheckInForm existing={latestEntry} onSave={onSaveCheckin} />
+          <Col xs={6} md={3}>
+            <div className={`detail-stat-card ${openNow ? 'status-open' : ''}`}>
+              <div className="detail-stat-label">Status</div>
+              <div className="detail-stat-value">{openNow ? 'Open now' : 'May be closed'}</div>
+            </div>
+          </Col>
+        </Row>
+
+        <Row className="g-3">
+          <Col md={6}>
+            <div className="detail-panel">
+              <div className="detail-panel-title">About this spot</div>
+              <p className="mb-3">{spot.description}</p>
+
+              <div className="meta-chip-row mb-0">
+                {spot.outlets    ? <span className="meta-chip">Outlets</span>             : null}
+                {spot.foodDrink  ? <span className="meta-chip">Food/Drink</span>          : null}
+                {spot.groupStudy ? <span className="meta-chip">Group study</span>         : null}
+                {spot.wifi       ? <span className="meta-chip">WiFi</span>                : null}
+                {spot.seating    ? <span className="meta-chip">Seating: {spot.seating}</span> : null}
+              </div>
+            </div>
+          </Col>
+
+          <Col md={6}>
+            <div className="detail-panel">
+              <div className="detail-panel-title">Community activity</div>
+              <p className="mb-2">
+                {ago !== null
+                  ? `Last update was ${ago} minute${ago === 1 ? '' : 's'} ago.`
+                  : 'No recent community updates yet.'}
+              </p>
+
+              <p className="mb-2">Crowd: <strong>{crowdInfo.text}</strong></p>
+              <p className="mb-2">Noise: <strong>{noiseInfo.text}</strong></p>
+
+              {status.latestNote ? (
+                <div className="checkin-hint mt-2">
+                  Latest note: "{status.latestNote}"
+                </div>
+              ) : (
+                <div className="checkin-hint mt-2">No recent note shared.</div>
+              )}
+            </div>
+          </Col>
+
+          <Col md={12}>
+            <div className="detail-panel">
+              <div className="detail-panel-title">Add your live update</div>
+              <CheckInForm existing={latestEntry(checkins)} onSave={onSaveCheckin} />
+            </div>
+          </Col>
+        </Row>
       </Modal.Body>
 
       <Modal.Footer className="justify-content-between">
-        <Button variant={isBookmarked ? 'warning' : 'outline-warning'} onClick={onToggleBookmark}>
-          {isBookmarked ? 'Bookmarked ★' : 'Bookmark ☆'}
+        <Button className="soft-btn" onClick={onToggleBookmark}>
+          {isBookmarked ? '★ Remove bookmark' : '☆ Save bookmark'}
         </Button>
-        <Button variant="secondary" onClick={onHide}>
+
+        <Button className="primary-btn" onClick={onHide}>
           Close
         </Button>
       </Modal.Footer>

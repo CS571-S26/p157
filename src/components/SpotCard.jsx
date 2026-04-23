@@ -1,9 +1,15 @@
-import { Badge, Button, Card, Stack } from 'react-bootstrap'
+import { Button, Card } from 'react-bootstrap'
 import { computeCommunityStatus, crowdLabel, minutesAgo, noiseLabel } from '../utils/spotUtils'
 
-function truncate(text, max = 80) {
-  if (!text) return ''
-  return text.length > max ? text.slice(0, max - 1) + '…' : text
+function NoiseDots({ level }) {
+  const colorClass = level <= 2 ? 'quiet' : level === 3 ? 'moderate' : 'loud'
+  return (
+    <span className="noise-dots" aria-label={`Noise ${level} out of 5`}>
+      {[1, 2, 3, 4, 5].map(i => (
+        <span key={i} className={`noise-dot${i <= level ? ` ${colorClass}` : ''}`} />
+      ))}
+    </span>
+  )
 }
 
 export default function SpotCard({
@@ -16,54 +22,72 @@ export default function SpotCard({
 }) {
   const status = computeCommunityStatus(checkins, spot.noise)
   const crowdInfo = crowdLabel(status.crowd)
-  const noiseInfo = noiseLabel(status.noiseNow)
   const ago = minutesAgo(status.latestTs)
 
+  const crowdClass = {
+    success: 'crowd-empty',
+    warning: 'crowd-some',
+    danger:  'crowd-full',
+  }[crowdInfo.variant] ?? ''
+
+  const noiseLevel = status.noiseNow
+  const noiseClass = noiseLevel <= 2 ? 'noise-quiet' : noiseLevel === 3 ? 'noise-moderate' : 'noise-loud'
+
   return (
-    <Card className="h-100 shadow-sm">
-      <Card.Body>
-        <Stack direction="horizontal" className="justify-content-between align-items-start">
-          <div>
-            <Card.Title className="mb-1">{spot.name}</Card.Title>
-            <Card.Subtitle className="text-muted">
-              {spot.type} · {spot.location}
-            </Card.Subtitle>
+    <Card className="spot-card border-0">
+      <Card.Body className="d-flex flex-column">
+        <div className="d-flex justify-content-between align-items-start gap-3 mb-2">
+          <div style={{ minWidth: 0 }}>
+            <div className="spot-type-pill">{spot.type}</div>
+            <div className="spot-card-title">{spot.name}</div>
+            <div className="spot-card-meta">{spot.location}</div>
           </div>
 
           <Button
-            variant={isBookmarked ? 'warning' : 'outline-warning'}
+            className={`bookmark-btn${isBookmarked ? ' bookmarked' : ''}`}
+            variant="light"
             onClick={onToggleBookmark}
-            aria-label="bookmark"
+            aria-label={isBookmarked ? 'Remove bookmark' : 'Add bookmark'}
           >
             {isBookmarked ? '★' : '☆'}
           </Button>
-        </Stack>
-
-        <div className="mt-3 d-flex flex-wrap gap-2">
-          <Badge bg={crowdInfo.variant}>Community crowd: {crowdInfo.text}</Badge>
-          <Badge bg={noiseInfo.variant}>Community noise now: {status.noiseNow}/5</Badge>
-          <Badge bg="secondary">Reports: {status.reportCount}</Badge>
-          {ago !== null ? <Badge bg="secondary">Updated {ago} min ago</Badge> : null}
-
-          {spot.outlets ? <Badge bg="secondary">Outlets</Badge> : null}
-          {spot.foodDrink ? <Badge bg="secondary">Food</Badge> : null}
-          {spot.groupStudy ? <Badge bg="secondary">Group</Badge> : null}
-
-          <Badge bg={isOpenNow ? 'success' : 'dark'}>{isOpenNow ? 'Open now' : 'May be closed'}</Badge>
-
-          {spot.tags?.includes('user-submitted') ? <Badge bg="info">User submitted</Badge> : null}
         </div>
 
-        {status.latestNote ? (
-          <div className="mt-2 text-muted small">
-            Latest note: {truncate(status.latestNote)}
+        <div className="status-grid">
+          <div className={`status-chip ${crowdClass}`}>
+            <span className="status-label">Crowd</span>
+            <span className="status-value">{crowdInfo.text}</span>
           </div>
-        ) : null}
 
-        <Card.Text className="mt-3 text-muted">{spot.description}</Card.Text>
+          <div className={`status-chip ${noiseClass}`}>
+            <span className="status-label">Noise</span>
+            <span className="status-value">
+              <NoiseDots level={noiseLevel} />
+              {' '}{noiseLevel}/5
+            </span>
+          </div>
+        </div>
 
-        <div className="d-flex justify-content-end">
-          <Button onClick={onOpenDetails}>View details</Button>
+        <div className="meta-chip-row">
+          <span className="meta-chip">Reports {status.reportCount}</span>
+          {spot.outlets   ? <span className="meta-chip">Outlets</span>   : null}
+          {spot.foodDrink ? <span className="meta-chip">Food/Drink</span> : null}
+          {spot.groupStudy ? <span className="meta-chip">Group</span>    : null}
+          <span className={`meta-chip ${isOpenNow ? 'open' : 'closed'}`}>
+            {isOpenNow ? 'Open now' : 'May be closed'}
+          </span>
+        </div>
+
+        <div className="spot-description">{spot.description}</div>
+
+        <div className="spot-card-footer mt-auto">
+          <div className="spot-update">
+            {ago !== null ? `Updated ${ago} min ago` : 'No live reports yet'}
+          </div>
+
+          <Button className="spot-primary-btn" onClick={onOpenDetails}>
+            View details
+          </Button>
         </div>
       </Card.Body>
     </Card>

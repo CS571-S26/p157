@@ -19,9 +19,10 @@ export default function SubmitPage() {
       seating: 'Unknown',
       description: s.note ? `User submitted: ${s.note}` : 'User submitted spot',
       tags: ['user-submitted'],
-      hours: { mon:[0,0], tue:[0,0], wed:[0,0], thu:[0,0], fri:[0,0], sat:[0,0], sun:[0,0] },
+      hours: { mon: [0, 0], tue: [0, 0], wed: [0, 0], thu: [0, 0], fri: [0, 0], sat: [0, 0], sun: [0, 0] },
       createdAt: s.ts
     }
+
     setUserSpots((prev) => [spot, ...prev])
   }
 
@@ -30,35 +31,56 @@ export default function SubmitPage() {
   }
 
   return (
-    <Container className="py-3">
-      <h2 className="mb-1">Submit</h2>
-      <div className="text-muted mb-3">
-        Submitted spots become part of Explore immediately. Stored locally for this prototype.
-      </div>
+    <Container className="page-shell">
+      <section className="hero-panel mb-4">
+        <div className="page-kicker">Contribute</div>
+        <h1 className="page-title page-title-sm">Submit a new study spot</h1>
+        <p className="page-subtitle">
+          Know a quiet corner or overlooked lounge? Add it here so it appears on Explore.
+        </p>
+      </section>
 
       <SubmissionForm onSubmit={addUserSpot} />
 
-      <Card>
-        <Card.Body>
-          <div className="d-flex justify-content-between align-items-center">
-            <Card.Title className="mb-0">My Submitted Spots</Card.Title>
-            <Button variant="outline-danger" size="sm" onClick={clearAll} disabled={userSpots.length === 0}>
-              Clear
+      <Card className="section-panel border-0">
+        <Card.Body className="p-0">
+          <div className="filter-header">
+            <div>
+              <div className="filter-title">My submitted spots</div>
+              <div className="filter-subtitle">
+                These are stored locally in this prototype and appear immediately on Explore.
+              </div>
+            </div>
+
+            <Button className="soft-btn" onClick={clearAll} disabled={userSpots.length === 0}>
+              Clear all
             </Button>
           </div>
 
           {userSpots.length === 0 ? (
-            <div className="text-muted mt-3">No submitted spots yet.</div>
+            <div className="empty-state">
+              <h4 className="mb-2">No submissions yet</h4>
+              <div>Your submitted spots will appear here after you add one.</div>
+            </div>
           ) : (
-            <div className="mt-3 d-flex flex-column gap-2">
-              {userSpots.map((s) => (
-                <div key={s.id} className="border rounded p-2 bg-light">
-                  <div className="fw-semibold">{s.name} <span className="text-muted">({s.type})</span></div>
-                  <div className="text-muted small">{s.location} · Base noise {s.noise}/5</div>
-                  <div className="text-muted small">
-                    {s.outlets ? 'Outlets' : 'No outlets'} · {s.foodDrink ? 'Food' : 'No food'} · {s.groupStudy ? 'Group ok' : 'Solo'}
+            <div className="d-flex flex-column gap-3">
+              {userSpots.map((spot) => (
+                <div key={spot.id} className="submission-list-item">
+                  <div className="submission-list-title">
+                    {spot.name} <span className="text-muted">({spot.type})</span>
                   </div>
-                  <div className="text-muted small">This spot is now visible on Explore.</div>
+
+                  <div className="submission-list-meta mb-1">
+                    {spot.location} · Base noise {spot.noise}/5
+                  </div>
+
+                  <div className="submission-list-meta">
+                    {spot.outlets ? 'Outlets' : 'No outlets'} ·
+                    {' '}
+                    {spot.foodDrink ? 'Food/drink' : 'No food/drink'} ·
+                    {' '}
+                    {spot.groupStudy ? 'Good for groups' : 'Better for solo work'}
+                  </div>
                 </div>
               ))}
             </div>

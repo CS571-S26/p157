@@ -1,12 +1,22 @@
+import { useEffect, useState } from 'react'
 import { Button, Col, Form, Row } from 'react-bootstrap'
-import { useState } from 'react'
+
+function noiseText(noise) {
+  if (noise <= 2) return 'Quiet'
+  if (noise === 3) return 'Moderate'
+  return 'Loud'
+}
 
 export default function CheckInForm({ existing, onSave }) {
   const [crowd, setCrowd] = useState(existing?.crowd || 'some')
   const [noise, setNoise] = useState(existing?.noise || 3)
-
-  const [showNote, setShowNote] = useState(Boolean(existing?.note))
   const [note, setNote] = useState(existing?.note || '')
+
+  useEffect(() => {
+    setCrowd(existing?.crowd || 'some')
+    setNoise(existing?.noise || 3)
+    setNote(existing?.note || '')
+  }, [existing])
 
   const last = existing?.ts ? new Date(existing.ts).toLocaleString() : null
 
@@ -15,9 +25,9 @@ export default function CheckInForm({ existing, onSave }) {
   }
 
   return (
-    <>
+    <div className="checkin-panel">
       <Row className="g-3">
-        <Col md={4}>
+        <Col md={5}>
           <Form.Label>Crowd level</Form.Label>
           <Form.Select value={crowd} onChange={(e) => setCrowd(e.target.value)}>
             <option value="empty">Empty</option>
@@ -26,42 +36,36 @@ export default function CheckInForm({ existing, onSave }) {
           </Form.Select>
         </Col>
 
-        <Col md={8}>
-          <Form.Label>Noise level: {noise}</Form.Label>
-          <Form.Range min={1} max={5} value={noise} onChange={(e) => setNoise(Number(e.target.value))} />
-          <div className="text-muted small">1 quiet · 5 loud</div>
+        <Col md={7}>
+          <Form.Label>Noise level: {noise} ({noiseText(noise)})</Form.Label>
+          <Form.Range
+            min={1}
+            max={5}
+            value={noise}
+            onChange={(e) => setNoise(Number(e.target.value))}
+          />
+          <div className="checkin-hint">You report the current noise directly. 1 is quiet, 5 is loud.</div>
         </Col>
-      </Row>
 
-      <div className="d-flex justify-content-between align-items-center mt-3">
-        <div className="d-flex gap-2 align-items-center">
-          <Button onClick={handleSave}>Save check-in</Button>
-
-          <Button
-            variant="outline-secondary"
-            onClick={() => setShowNote((v) => !v)}
-            size="sm"
-          >
-            {showNote ? 'Hide note' : 'Add note'}
-          </Button>
-        </div>
-
-        <div className="text-muted small">{last ? `Last saved: ${last}` : 'No check-in yet'}</div>
-      </div>
-
-      {showNote ? (
-        <div className="mt-3">
-          <Form.Label className="mb-1">Note (optional)</Form.Label>
+        <Col md={12}>
+          <Form.Label>Optional note</Form.Label>
           <Form.Control
             value={note}
             onChange={(e) => setNote(e.target.value)}
-            placeholder="quiet today, outlets near window..."
+            placeholder="Example: quieter on the upper floor, a lot of outlets near the windows"
           />
-          <div className="text-muted small mt-1">
-            This note will show on the spot card as the latest report.
-          </div>
+        </Col>
+      </Row>
+
+      <div className="d-flex flex-wrap justify-content-between align-items-center gap-3 mt-4">
+        <div className="checkin-hint">
+          {last ? `Last saved ${last}` : 'No check-in yet. Be the first to report.'}
         </div>
-      ) : null}
-    </>
+
+        <Button className="spot-primary-btn" onClick={handleSave}>
+          Save check-in
+        </Button>
+      </div>
+    </div>
   )
 }

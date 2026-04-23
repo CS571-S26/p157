@@ -1,5 +1,5 @@
-import { Button, Card, Col, Form, Row } from 'react-bootstrap'
 import { useState } from 'react'
+import { Button, Card, Col, Form, Row } from 'react-bootstrap'
 
 export default function SubmissionForm({ onSubmit }) {
   const [form, setForm] = useState({
@@ -12,6 +12,7 @@ export default function SubmissionForm({ onSubmit }) {
     groupStudy: true,
     note: ''
   })
+
   const [errors, setErrors] = useState({})
 
   function update(partial) {
@@ -19,20 +20,24 @@ export default function SubmissionForm({ onSubmit }) {
   }
 
   function validate() {
-    const e = {}
-    if (!form.name.trim()) e.name = 'Name is required.'
-    if (!form.location.trim()) e.location = 'Location is required.'
-    setErrors(e)
-    return Object.keys(e).length === 0
+    const nextErrors = {}
+
+    if (!form.name.trim()) nextErrors.name = 'Name is required.'
+    if (!form.location.trim()) nextErrors.location = 'Location is required.'
+
+    setErrors(nextErrors)
+    return Object.keys(nextErrors).length === 0
   }
 
   function handleSubmit() {
     if (!validate()) return
+
     onSubmit({
       ...form,
       id: crypto.randomUUID(),
       ts: Date.now()
     })
+
     setForm({
       name: '',
       type: 'Library',
@@ -43,21 +48,30 @@ export default function SubmissionForm({ onSubmit }) {
       groupStudy: true,
       note: ''
     })
+
     setErrors({})
   }
 
   return (
-    <Card className="mb-3">
-      <Card.Body>
-        <Card.Title className="mb-3">Suggest a new spot (local prototype)</Card.Title>
+    <Card className="section-panel border-0 mb-4">
+      <Card.Body className="p-0">
+        <div className="filter-header">
+          <div>
+            <div className="filter-title">Suggest a new study spot</div>
+            <div className="filter-subtitle">
+              For this prototype, submitted spots are stored locally and appear on Explore right away.
+            </div>
+          </div>
+        </div>
 
-        <Row className="g-3">
+        <Row className="g-4">
           <Col md={6}>
             <Form.Label>Name</Form.Label>
             <Form.Control
               value={form.name}
               onChange={(e) => update({ name: e.target.value })}
               isInvalid={!!errors.name}
+              placeholder="Example: Humanities Reading Room"
             />
             <Form.Control.Feedback type="invalid">{errors.name}</Form.Control.Feedback>
           </Col>
@@ -79,21 +93,42 @@ export default function SubmissionForm({ onSubmit }) {
               value={form.location}
               onChange={(e) => update({ location: e.target.value })}
               isInvalid={!!errors.location}
-              placeholder="Building name or address"
+              placeholder="Building name or street address"
             />
             <Form.Control.Feedback type="invalid">{errors.location}</Form.Control.Feedback>
           </Col>
 
           <Col md={6}>
-            <Form.Label>Noise (1 to 5): {form.noise}</Form.Label>
-            <Form.Range min={1} max={5} value={form.noise} onChange={(e) => update({ noise: Number(e.target.value) })} />
+            <Form.Label>Base noise: {form.noise}</Form.Label>
+            <Form.Range
+              min={1}
+              max={5}
+              value={form.noise}
+              onChange={(e) => update({ noise: Number(e.target.value) })}
+            />
+            <div className="filter-chip-note">
+              This is just the default noise level before community updates come in.
+            </div>
           </Col>
 
-          <Col md={6} className="d-flex align-items-end">
-            <div className="d-flex flex-wrap gap-3">
-              <Form.Check label="Outlets" checked={form.outlets} onChange={(e) => update({ outlets: e.target.checked })} />
-              <Form.Check label="Food/Drink" checked={form.foodDrink} onChange={(e) => update({ foodDrink: e.target.checked })} />
-              <Form.Check label="Group study" checked={form.groupStudy} onChange={(e) => update({ groupStudy: e.target.checked })} />
+          <Col md={6}>
+            <Form.Label>Amenities</Form.Label>
+            <div className="d-flex flex-column gap-2">
+              <Form.Check
+                label="Outlets available"
+                checked={form.outlets}
+                onChange={(e) => update({ outlets: e.target.checked })}
+              />
+              <Form.Check
+                label="Food or drink allowed"
+                checked={form.foodDrink}
+                onChange={(e) => update({ foodDrink: e.target.checked })}
+              />
+              <Form.Check
+                label="Good for group study"
+                checked={form.groupStudy}
+                onChange={(e) => update({ groupStudy: e.target.checked })}
+              />
             </div>
           </Col>
 
@@ -107,8 +142,10 @@ export default function SubmissionForm({ onSubmit }) {
           </Col>
         </Row>
 
-        <div className="d-flex justify-content-end mt-3">
-          <Button onClick={handleSubmit}>Submit</Button>
+        <div className="d-flex justify-content-end mt-4">
+          <Button className="primary-btn" onClick={handleSubmit}>
+            Submit new spot
+          </Button>
         </div>
       </Card.Body>
     </Card>
