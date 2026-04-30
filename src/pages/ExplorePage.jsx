@@ -6,6 +6,8 @@ import SpotCard from '../components/SpotCard'
 import SpotDetailModal from '../components/SpotDetailModal'
 import { useLocalStorage } from '../hooks/useLocalStorage'
 import { computeCommunityStatus, isOpenNowApprox } from '../utils/spotUtils'
+import PageHero from '../components/PageHero'
+import SummaryCard from '../components/SummaryCard'
 
 function normalizeEntries(raw) {
   if (!raw) return []
@@ -140,61 +142,38 @@ export default function ExplorePage() {
 
   return (
     <Container className="page-shell">
-      <section className="hero-panel mb-4">
-        <div className="page-kicker">Live campus discovery</div>
-
-        <div className="d-lg-flex justify-content-between align-items-start gap-4">
-          <div>
-            <h1 className="page-title">Find a study spot that fits right now</h1>
-            <p className="page-subtitle">
-              Browse libraries, lounges, cafes, and student spaces. Use community check-ins
-              to see where it is quieter, more crowded, or newly active.
-            </p>
-          </div>
-
-          <div className="hero-note">
-            This is a front-end prototype. Bookmarks, check-ins, and submissions are stored
-            locally in the browser.
-          </div>
+      <PageHero
+        kicker="Live campus discovery"
+        title="Find a study spot that fits right now"
+        subtitle="Browse libraries, lounges, cafes, and student spaces. Use community check-ins to see where it is quieter, more crowded, or newly active."
+      >
+        <div className="hero-note">
+          This is a front-end prototype. Bookmarks, check-ins, and submissions are stored
+          locally in the browser.
         </div>
+      </PageHero>
 
-        <Row className="g-3 mt-3">
-          <Col xs={6} md={2}>
-            <div className="summary-card">
-              <div className="summary-label">Total spots</div>
-              <div className="summary-value">{stats.totalSpots}</div>
-            </div>
-          </Col>
+      <Row className="g-3 mt-3 mb-4">
+        <Col xs={6} md={2}>
+          <SummaryCard label="Total spots" value={stats.totalSpots} />
+        </Col>
 
-          <Col xs={6} md={2}>
-            <div className="summary-card">
-              <div className="summary-label">Showing</div>
-              <div className="summary-value">{stats.visible}</div>
-            </div>
-          </Col>
+        <Col xs={6} md={2}>
+          <SummaryCard label="Showing" value={stats.visible} />
+        </Col>
 
-          <Col xs={6} md={2}>
-            <div className="summary-card">
-              <div className="summary-label">Bookmarks</div>
-              <div className="summary-value">{stats.bookmarks}</div>
-            </div>
-          </Col>
+        <Col xs={6} md={2}>
+          <SummaryCard label="Bookmarks" value={stats.bookmarks} />
+        </Col>
 
-          <Col xs={6} md={3}>
-            <div className="summary-card">
-              <div className="summary-label">User submitted</div>
-              <div className="summary-value">{stats.userSubmitted}</div>
-            </div>
-          </Col>
+        <Col xs={6} md={3}>
+          <SummaryCard label="User submitted" value={stats.userSubmitted} />
+        </Col>
 
-          <Col xs={12} md={3}>
-            <div className="summary-card">
-              <div className="summary-label">Community reports</div>
-              <div className="summary-value">{stats.recentReports}</div>
-            </div>
-          </Col>
-        </Row>
-      </section>
+        <Col xs={12} md={3}>
+          <SummaryCard label="Community reports" value={stats.recentReports} />
+        </Col>
+      </Row>
 
       <SpotFilters
         filters={filters}
@@ -208,7 +187,7 @@ export default function ExplorePage() {
         {filtered.length === 0 ? (
           <Col>
             <div className="empty-state">
-              <h4 className="mb-2">No spots match your filters</h4>
+              <h2 className="empty-state-title mb-2">No spots match your filters</h2>
               <div>Try relaxing a few filters or resetting the search.</div>
             </div>
           </Col>

@@ -5,6 +5,7 @@ import SpotCard from '../components/SpotCard'
 import SpotDetailModal from '../components/SpotDetailModal'
 import { useLocalStorage } from '../hooks/useLocalStorage'
 import { isOpenNowApprox } from '../utils/spotUtils'
+import PageHero from '../components/PageHero'
 
 export default function BookmarksPage() {
   const [bookmarks, setBookmarks] = useLocalStorage('ssf_bookmarks', [])
@@ -34,19 +35,17 @@ export default function BookmarksPage() {
 
   return (
     <Container className="page-shell">
-      <section className="hero-panel mb-4">
-        <div className="page-kicker">Saved spots</div>
-        <h1 className="page-title page-title-sm">Your bookmarks</h1>
-        <p className="page-subtitle">
-          Keep a personal shortlist of study spaces you want to return to.
-        </p>
-      </section>
+      <PageHero
+        kicker="Saved spots"
+        title="Your bookmarks"
+        subtitle="Keep a personal shortlist of study spaces you want to return to."
+      />
 
       <Row className="g-4">
         {bookmarkedSpots.length === 0 ? (
           <Col>
             <div className="empty-state">
-              <h4 className="mb-2">No bookmarks yet</h4>
+              <h2 className="empty-state-title mb-2">No bookmarks yet</h2>
               <div>Go to Explore and save a few places you want to keep track of.</div>
             </div>
           </Col>

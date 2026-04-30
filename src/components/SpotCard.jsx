@@ -1,6 +1,10 @@
 import { Button, Card } from 'react-bootstrap'
 import { computeCommunityStatus, crowdLabel, minutesAgo, noiseLabel } from '../utils/spotUtils'
 
+function spotTypeClass(type) {
+  return `spot-card-${String(type).toLowerCase().replace(/\s+/g, '-')}`
+}
+
 function NoiseDots({ level }) {
   const colorClass = level <= 2 ? 'quiet' : level === 3 ? 'moderate' : 'loud'
   return (
@@ -34,12 +38,13 @@ export default function SpotCard({
   const noiseClass = noiseLevel <= 2 ? 'noise-quiet' : noiseLevel === 3 ? 'noise-moderate' : 'noise-loud'
 
   return (
-    <Card className="spot-card border-0">
+    <Card className={`spot-card ${spotTypeClass(spot.type)} border-0`}>
       <Card.Body className="d-flex flex-column">
         <div className="d-flex justify-content-between align-items-start gap-3 mb-2">
           <div style={{ minWidth: 0 }}>
             <div className="spot-type-pill">{spot.type}</div>
-            <div className="spot-card-title">{spot.name}</div>
+            {/* Changed from div to h2 for proper heading structure */}
+            <h2 className="spot-card-title">{spot.name}</h2>
             <div className="spot-card-meta">{spot.location}</div>
           </div>
 
@@ -47,7 +52,7 @@ export default function SpotCard({
             className={`bookmark-btn${isBookmarked ? ' bookmarked' : ''}`}
             variant="light"
             onClick={onToggleBookmark}
-            aria-label={isBookmarked ? 'Remove bookmark' : 'Add bookmark'}
+            aria-label={isBookmarked ? `Remove bookmark for ${spot.name}` : `Add bookmark for ${spot.name}`}
           >
             {isBookmarked ? '★' : '☆'}
           </Button>

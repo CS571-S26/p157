@@ -21,10 +21,8 @@ export default function SubmissionForm({ onSubmit }) {
 
   function validate() {
     const nextErrors = {}
-
     if (!form.name.trim()) nextErrors.name = 'Name is required.'
     if (!form.location.trim()) nextErrors.location = 'Location is required.'
-
     setErrors(nextErrors)
     return Object.keys(nextErrors).length === 0
   }
@@ -59,72 +57,84 @@ export default function SubmissionForm({ onSubmit }) {
           <div>
             <div className="filter-title">Suggest a new study spot</div>
             <div className="filter-subtitle">
-              For this prototype, submitted spots are stored locally and appear on Explore right away.
+              Submitted spots are saved on your device and appear on Explore right away.
             </div>
           </div>
         </div>
 
         <Row className="g-4">
           <Col md={6}>
-            <Form.Label>Name</Form.Label>
-            <Form.Control
-              value={form.name}
-              onChange={(e) => update({ name: e.target.value })}
-              isInvalid={!!errors.name}
-              placeholder="Example: Humanities Reading Room"
-            />
-            <Form.Control.Feedback type="invalid">{errors.name}</Form.Control.Feedback>
+            <Form.Group controlId="submitSpotName">
+              <Form.Label>Name</Form.Label>
+              <Form.Control
+                value={form.name}
+                onChange={(e) => update({ name: e.target.value })}
+                isInvalid={!!errors.name}
+                placeholder="Example: Humanities Reading Room"
+              />
+              <Form.Control.Feedback type="invalid">{errors.name}</Form.Control.Feedback>
+            </Form.Group>
           </Col>
 
           <Col md={6}>
-            <Form.Label>Type</Form.Label>
-            <Form.Select value={form.type} onChange={(e) => update({ type: e.target.value })}>
-              <option>Library</option>
-              <option>Cafe</option>
-              <option>Building Lounge</option>
-              <option>Classroom</option>
-              <option>Student Union</option>
-            </Form.Select>
+            <Form.Group controlId="submitSpotType">
+              <Form.Label>Type</Form.Label>
+              <Form.Select value={form.type} onChange={(e) => update({ type: e.target.value })}>
+                <option>Library</option>
+                <option>Cafe</option>
+                <option>Building Lounge</option>
+                <option>Classroom</option>
+                <option>Student Union</option>
+              </Form.Select>
+            </Form.Group>
           </Col>
 
           <Col md={12}>
-            <Form.Label>Location</Form.Label>
-            <Form.Control
-              value={form.location}
-              onChange={(e) => update({ location: e.target.value })}
-              isInvalid={!!errors.location}
-              placeholder="Building name or street address"
-            />
-            <Form.Control.Feedback type="invalid">{errors.location}</Form.Control.Feedback>
+            <Form.Group controlId="submitSpotLocation">
+              <Form.Label>Location</Form.Label>
+              <Form.Control
+                value={form.location}
+                onChange={(e) => update({ location: e.target.value })}
+                isInvalid={!!errors.location}
+                placeholder="Building name or street address"
+              />
+              <Form.Control.Feedback type="invalid">{errors.location}</Form.Control.Feedback>
+            </Form.Group>
           </Col>
 
           <Col md={6}>
-            <Form.Label>Base noise: {form.noise}</Form.Label>
-            <Form.Range
-              min={1}
-              max={5}
-              value={form.noise}
-              onChange={(e) => update({ noise: Number(e.target.value) })}
-            />
-            <div className="filter-chip-note">
-              This is just the default noise level before community updates come in.
-            </div>
+            <Form.Group controlId="submitSpotNoise">
+              <Form.Label htmlFor="submitSpotNoise">Base noise: {form.noise}</Form.Label>
+              <Form.Range
+                id="submitSpotNoise"
+                min={1}
+                max={5}
+                value={form.noise}
+                onChange={(e) => update({ noise: Number(e.target.value) })}
+              />
+              <div className="filter-chip-note">
+                This is the default noise level before community updates come in.
+              </div>
+            </Form.Group>
           </Col>
 
           <Col md={6}>
             <Form.Label>Amenities</Form.Label>
-            <div className="d-flex flex-column gap-2">
+            <div className="d-flex flex-column gap-2" role="group" aria-label="Amenities">
               <Form.Check
+                id="submitSpotOutlets"
                 label="Outlets available"
                 checked={form.outlets}
                 onChange={(e) => update({ outlets: e.target.checked })}
               />
               <Form.Check
+                id="submitSpotFoodDrink"
                 label="Food or drink allowed"
                 checked={form.foodDrink}
                 onChange={(e) => update({ foodDrink: e.target.checked })}
               />
               <Form.Check
+                id="submitSpotGroupStudy"
                 label="Good for group study"
                 checked={form.groupStudy}
                 onChange={(e) => update({ groupStudy: e.target.checked })}
@@ -133,12 +143,14 @@ export default function SubmissionForm({ onSubmit }) {
           </Col>
 
           <Col md={12}>
-            <Form.Label>Extra note (optional)</Form.Label>
-            <Form.Control
-              value={form.note}
-              onChange={(e) => update({ note: e.target.value })}
-              placeholder="Anything helpful for other students"
-            />
+            <Form.Group controlId="submitSpotNote">
+              <Form.Label>Extra note (optional)</Form.Label>
+              <Form.Control
+                value={form.note}
+                onChange={(e) => update({ note: e.target.value })}
+                placeholder="Anything helpful for other students"
+              />
+            </Form.Group>
           </Col>
         </Row>
 

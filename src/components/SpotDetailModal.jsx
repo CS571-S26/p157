@@ -53,11 +53,19 @@ export default function SpotDetailModal({
   const noiseClass = noiseLevel <= 2 ? 'noise-quiet' : noiseLevel === 3 ? 'noise-moderate' : 'noise-loud'
 
   return (
-    <Modal show={show} onHide={onHide} centered size="lg" dialogClassName="spot-modal">
+    <Modal
+      show={show}
+      onHide={onHide}
+      centered
+      size="lg"
+      dialogClassName="spot-modal"
+      aria-labelledby="spot-modal-title"
+    >
       <Modal.Header closeButton>
         <div>
           <div className="spot-type-pill mb-2">{spot.type}</div>
-          <div className="modal-spot-title">{spot.name}</div>
+          {/* Changed from div to h2 for proper heading + added id for aria-labelledby */}
+          <h2 className="modal-spot-title" id="spot-modal-title">{spot.name}</h2>
           <div className="modal-spot-meta">{spot.location}</div>
         </div>
       </Modal.Header>

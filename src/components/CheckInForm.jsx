@@ -28,32 +28,41 @@ export default function CheckInForm({ existing, onSave }) {
     <div className="checkin-panel">
       <Row className="g-3">
         <Col md={5}>
-          <Form.Label>Crowd level</Form.Label>
-          <Form.Select value={crowd} onChange={(e) => setCrowd(e.target.value)}>
-            <option value="empty">Empty</option>
-            <option value="some">Some seats</option>
-            <option value="full">Full</option>
-          </Form.Select>
+          <Form.Group controlId="checkinCrowd">
+            <Form.Label>Crowd level</Form.Label>
+            <Form.Select value={crowd} onChange={(e) => setCrowd(e.target.value)}>
+              <option value="empty">Empty</option>
+              <option value="some">Some seats</option>
+              <option value="full">Full</option>
+            </Form.Select>
+          </Form.Group>
         </Col>
 
         <Col md={7}>
-          <Form.Label>Noise level: {noise} ({noiseText(noise)})</Form.Label>
-          <Form.Range
-            min={1}
-            max={5}
-            value={noise}
-            onChange={(e) => setNoise(Number(e.target.value))}
-          />
-          <div className="checkin-hint">You report the current noise directly. 1 is quiet, 5 is loud.</div>
+          <Form.Group controlId="checkinNoise">
+            <Form.Label htmlFor="checkinNoise">
+              Noise level: {noise} ({noiseText(noise)})
+            </Form.Label>
+            <Form.Range
+              id="checkinNoise"
+              min={1}
+              max={5}
+              value={noise}
+              onChange={(e) => setNoise(Number(e.target.value))}
+            />
+            <div className="checkin-hint">You report the current noise directly. 1 is quiet, 5 is loud.</div>
+          </Form.Group>
         </Col>
 
         <Col md={12}>
-          <Form.Label>Optional note</Form.Label>
-          <Form.Control
-            value={note}
-            onChange={(e) => setNote(e.target.value)}
-            placeholder="Example: quieter on the upper floor, a lot of outlets near the windows"
-          />
+          <Form.Group controlId="checkinNote">
+            <Form.Label>Optional note</Form.Label>
+            <Form.Control
+              value={note}
+              onChange={(e) => setNote(e.target.value)}
+              placeholder="Example: quieter on the upper floor, outlets near the windows"
+            />
+          </Form.Group>
         </Col>
       </Row>
 

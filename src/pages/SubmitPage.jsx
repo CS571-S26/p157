@@ -59,7 +59,7 @@ export default function SubmitPage() {
 
           {userSpots.length === 0 ? (
             <div className="empty-state">
-              <h4 className="mb-2">No submissions yet</h4>
+              <h2 className="empty-state-title mb-2">No submissions yet</h2>
               <div>Your submitted spots will appear here after you add one.</div>
             </div>
           ) : (
